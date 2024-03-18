@@ -6,6 +6,8 @@ library(stringr)
 library(purrr)
 library(readr)
 
+# Helper Functions
+
 # Function to format variable names
 format_variable_names <- function(names) {
     names %>%
@@ -20,6 +22,103 @@ format_variable_names <- function(names) {
             }
         )
 }
+
+# Function to calculate averages of selected x and y variables
+calculate_averages <- function(dataframe, variable_x, variable_y) {
+    # Calculate the average values
+    average_x <- dataframe %>% pull(variable_x) %>% mean() %>% round(digits = 1)
+    average_y <- dataframe %>% pull(variable_y) %>% mean() %>% round(digits = 1)
+    
+    # Convert the calculated value to a string
+    str_x <- paste("Average", variable_x, "=", average_x)
+    str_y <- paste("Average", variable_y, "=", average_y)
+    
+    # Call the strings as HTML element
+    HTML(
+        paste(
+            "<span style='color: red;'>",
+            str_x,
+            str_y,
+            "</span>",
+            sep = "<br/>"
+        )
+    )
+}
+
+# Function to perform correlation analysis between selected variables
+perform_correlation <- function(dataframe, variable_x, variable_y) {
+    dataframe %>%
+        summarize(
+            data = cor(
+                x = !!sym(variable_x),
+                y = !!sym(variable_y)
+            )
+        ) %>%
+        mutate(data = scales::percent(data, accuracy = 0.1)) %>%
+        pull(data) # Extract the correlation coefficient value
+}
+
+# Function to perform linear regression on selected variables
+perform_linear_regression <- function(dataframe, variable_x, variable_y) {
+    x <- dataframe %>% pull(variable_x)
+    y <- dataframe %>% pull(variable_y)
+    lm(formula = y ~ x, data = dataframe)
+}
+
+# Function to create a scatter plot
+draw_scatterplot <- function(
+        dataframe,
+        variable_x,
+        variable_y,
+        colour,
+        alpha_value,
+        size_value,
+        title,
+        correlation_coefficient,
+        regression_model
+) {
+    ggplot(
+        data = dataframe,
+        mapping = aes_string(
+            # Enclose input names in backticks when they contain a space
+            x = paste0("`", variable_x, "`"),
+            y = paste0("`", variable_y, "`"),
+            color = paste0("`", colour, "`")
+        )
+    ) +
+        geom_point(alpha = alpha_value, size = size_value) +
+        ggtitle(label = title) +
+        labs(color = colour) +
+
+        # # Add linear regression line with confidence interval
+        # geom_smooth(method = "lm", formula = y ~ x, se = TRUE) +
+
+        # Add text annotation for correlation coefficient
+        geom_text(
+            x = Inf, y = -Inf,
+            label = paste("Correlation = ", correlation_coefficient),
+            hjust = 1,
+            vjust = -0.5,
+            color = "red",
+            size = 5,
+        ) +
+
+        # Add text annotation for linear regression equation
+        geom_text(
+            x = Inf, y = Inf,
+            label = paste(
+                "Regression: ",
+                sprintf("%.2f", coef(regression_model)[1]), " + ",
+                sprintf("%.2f", coef(regression_model)[2]), " * ",
+                input$select_x
+            ),
+            hjust = 1,
+            vjust = 1,
+            color = "blue",
+            size = 5,
+        )
+}
+
 
 # Load data
 load("movies.RData")
@@ -142,7 +241,7 @@ server <- function(input, output, session) {
         # If the check box is selected, display the data
         if (input$show_data) {
 
-            # Check if points are selected in the scatter plot
+            # Check if points are selected/brushed in the scatter plot
             if (!is.null(input$plot_brush)) {
 
                 # If points are selected, filter the data based on selected points
@@ -166,30 +265,36 @@ server <- function(input, output, session) {
     output$scatterplot <- renderPlot({
 
         # Calculate correlation coefficient
-        correlation <- numeric_data %>%
-            summarize(
-                data = cor(
-                    x = !!sym(input$select_x),
-                    y = !!sym(input$select_y)
-                )
-            ) %>%
-            mutate(data = scales::percent(data, accuracy = 0.1)) %>%
-            pull(data) # Extract the correlation coefficient value
-
-        # Calculate linear regression coefficients
-        lm_model <- lm(
-            formula = as.formula(
-                paste(
-                    # Enclose input names in backticks when they contain a space
-                    paste0("`", input$select_y, "`"),
-                    "~",
-                    paste0("`", input$select_x, "`")
-                )
-            ),
-            data = movies,
+        correlation_coefficient <- perform_correlation(
+            dataframe = movies,
+            variable_x = input$select_x,
+            variable_y = input$select_y
         )
 
+        # Perform Linear Regression
+        regression_model <- perform_linear_regression(
+            dataframe = movies,
+            variable_x = input$select_x,
+            variable_y = input$select_y
+        )
+
+        # Print Linear Regression Summary
+        output$lmoutput <- renderPrint({
+            print(summary(regression_model), digits = 3, signif.stars = TRUE)
+        })
+
         # Plot the scatter plot
+        # draw_scatterplot(
+        #     dataframe = movies,
+        #     variable_x = input$select_x,
+        #     variable_y = input$select_y,
+        #     colour = input$colour,
+        #     alpha_value = input$alpha,
+        #     size_value = input$size,
+        #     title = input$plot_title,
+        #     correlation_coefficient = correlation_coefficient,
+        #     regression_model = regression_model
+        # )
         ggplot(
             data = movies,
             mapping = aes_string(
@@ -198,7 +303,7 @@ server <- function(input, output, session) {
                 y = paste0("`", input$select_y, "`"),
                 color = paste0("`", input$colour, "`")
             )
-        ) + 
+        ) +
             geom_point(alpha = input$alpha, size = input$size) +
             ggtitle(label = input$plot_title) +
             labs(color = input$colour) +
@@ -209,7 +314,7 @@ server <- function(input, output, session) {
             # Add text annotation for correlation coefficient
             geom_text(
                 x = Inf, y = -Inf,
-                label = paste("Correlation = ", correlation),
+                label = paste("Correlation = ", correlation_coefficient),
                 hjust = 1,
                 vjust = -0.5,
                 color = "red",
@@ -218,11 +323,11 @@ server <- function(input, output, session) {
 
             # Add text annotation for linear regression equation
             geom_text(
-                x = Inf, y = Inf, 
+                x = Inf, y = Inf,
                 label = paste(
                     "Regression: ",
-                    sprintf("%.2f", coef(lm_model)[1]), " + ",
-                    sprintf("%.2f", coef(lm_model)[2]), " * ",
+                    sprintf("%.2f", coef(regression_model)[1]), " + ",
+                    sprintf("%.2f", coef(regression_model)[2]), " * ",
                     input$select_x
                 ),
                 hjust = 1,
@@ -232,44 +337,19 @@ server <- function(input, output, session) {
             )
     })
 
+    # Print the variable averages as HTML elements
     output$averages <- renderText({
-        # Calculate the average values
-        average_x <- movies %>% pull(input$select_x) %>% mean() %>% round(digits = 1)
-        average_y <- movies %>% pull(input$select_y) %>% mean() %>% round(digits = 1)
-
-        # Convert the calculated value to a string
-        str_x <- paste("Average", input$select_x, "=", average_x)
-        str_y <- paste("Average", input$select_y, "=", average_y)
-
-        # Call the strings as HTML element
-        HTML(
-            paste(
-                "<span style='color: red;'>",
-                str_x,
-                str_y,
-                "</span>",
-                sep = "<br/>"
-            )
+        calculate_averages(
+            dataframe = movies,
+            variable_x = input$select_x,
+            variable_y = input$select_y
         )
     })
 
-    # Print Linear Regression Summary
-    output$lmoutput <- renderPrint({
-        x <- movies %>% pull(input$select_x)
-        y <- movies %>% pull(input$select_y)
-        print(
-            summary(lm(formula = y ~ x, data = movies)),
-            digits = 3,
-            signif.stars = TRUE,
-        )
+    # Display the table of movie data
+    output$movie_table <- renderDataTable({
+        filtered_data()
     })
-
-    output$movie_table <- renderDataTable(
-        {
-            filtered_data()
-        },
-        # caption = "Details of the Movie Dataset.",
-    )
 
     # Download file
     output$download_data <- downloadHandler(
