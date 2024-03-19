@@ -5,6 +5,7 @@ library(dplyr)
 library(stringr)
 library(purrr)
 library(readr)
+library(DT)
 
 # Function to format variable names
 format_variable_names <- function(names) {
@@ -101,13 +102,8 @@ user_interface <- fluidPage(
                 inputId = "movie_type",
                 label = "Select Movie Type(s):",
                 choices = levels(factor_data$`Title Type`),
-                selected = "Feature Film",
+                selected = levels(factor_data$`Title Type`),
             ),
-            # numericInput(
-            #     inputId = "size",
-            #     label = "Sample Size",
-            #     value = 300,
-            # ),
 
         ),
         
@@ -121,6 +117,7 @@ user_interface <- fluidPage(
                 brush = "plot_brush",
                 hover = "plot_hover",
             ),
+            uiOutput(outputId = "number_obs"),
             htmlOutput(outputId = "averages"),
             verbatimTextOutput(outputId = "lmoutput"),
             br(),
@@ -137,6 +134,25 @@ user_interface <- fluidPage(
 )
 
 server <- function(input, output, session) {
+    
+    # Set initial value for plot title text input
+    observe({
+        updateTextInput(
+            session = session,
+            inputId = "plot_title",
+            value = paste(input$select_y, "vs.", input$select_x)
+        )
+    })
+    
+    # Subset the movies by title type (documentary, movie or TV show)
+    movie_subset <- reactive({
+        req(input$movie_type) # Check availability of the input
+        movies %>%
+            filter(`Title Type` %in% input$movie_type)
+        # movies %>% select(input$movie_type)
+    })
+
+    # Filter to table based on selected (brushed) points with the mouse (all points selected by default)
     filtered_data <- reactive({
 
         # If the check box is selected, display the data
@@ -146,27 +162,42 @@ server <- function(input, output, session) {
             if (!is.null(input$plot_brush)) {
 
                 # If points are selected, filter the data based on selected points
-                brushed_data <- brushedPoints(df = movies, brush = input$plot_brush)
+                brushed_data <- brushedPoints(
+                    df = movie_subset(),
+                    brush = input$plot_brush
+                )
                 return(brushed_data)
             }
             
             else if (!is.null(input$plot_hover)) {
                 
-                hover_data <- nearPoints(df = movies, coordinfo = input$plot_hover)
+                hover_data <- nearPoints(
+                    df = movie_subset(),
+                    coordinfo = input$plot_hover
+                )
                 return(hover_data)
             }
 
             else {
                 # If no points are selected, display the entire dataset
-                return(movies)
+                return(movie_subset())
             }
         }
+    })
+
+    # Print number of movies plotted
+    output$number_obs <- renderUI({
+        HTML(paste(
+            "The plot displays the relationship between the <br>",
+            input$select_x, "and", input$select_y, "of",
+            nrow(filtered_data()), "movies."
+        ))
     })
 
     output$scatterplot <- renderPlot({
 
         # Calculate correlation coefficient
-        correlation <- numeric_data %>%
+        correlation <- movie_subset() %>%
             summarize(
                 data = cor(
                     x = !!sym(input$select_x),
@@ -186,12 +217,12 @@ server <- function(input, output, session) {
                     paste0("`", input$select_x, "`")
                 )
             ),
-            data = movies,
+            data = movie_subset(),
         )
 
         # Plot the scatter plot
         ggplot(
-            data = movies,
+            data = movie_subset(),
             mapping = aes_string(
                 # Enclose input names in backticks when they contain a space
                 x = paste0("`", input$select_x, "`"),
@@ -234,8 +265,14 @@ server <- function(input, output, session) {
 
     output$averages <- renderText({
         # Calculate the average values
-        average_x <- movies %>% pull(input$select_x) %>% mean() %>% round(digits = 1)
-        average_y <- movies %>% pull(input$select_y) %>% mean() %>% round(digits = 1)
+        average_x <- movie_subset() %>%
+            pull(input$select_x) %>%
+            mean() %>%
+            round(digits = 1)
+        average_y <- movie_subset() %>%
+            pull(input$select_y) %>%
+            mean() %>%
+            round(digits = 1)
 
         # Convert the calculated value to a string
         str_x <- paste("Average", input$select_x, "=", average_x)
@@ -253,40 +290,33 @@ server <- function(input, output, session) {
         )
     })
 
-    # Print Linear Regression Summary
-    output$lmoutput <- renderPrint({
-        x <- movies %>% pull(input$select_x)
-        y <- movies %>% pull(input$select_y)
-        print(
-            summary(lm(formula = y ~ x, data = movies)),
-            digits = 3,
-            signif.stars = TRUE,
+    # # Print Linear Regression Summary
+    # output$lmoutput <- renderPrint({
+    #     x <- movie_subset() %>% pull(input$select_x)
+    #     y <- movie_subset() %>% pull(input$select_y)
+    #     print(
+    #         summary(lm(formula = y ~ x, data = movie_subset())),
+    #         digits = 3,
+    #         signif.stars = TRUE,
+    #     )
+    # })
+
+    # Display the table of data basedd on the filtered data (brushed or not)
+    output$movie_table <- renderDT({
+        datatable(
+            data = filtered_data(),
+            options = list(pageLength = 10),
+            rownames = FALSE,
         )
     })
 
-    output$movie_table <- renderDataTable(
-        {
-            filtered_data()
-        },
-        # caption = "Details of the Movie Dataset.",
-    )
-
-    # Download file
+    # Download file following filtering, or not
     output$download_data <- downloadHandler(
         filename = "movie_data.csv", # Default name; can be change on save
         content = function(file) {
             write_csv(filtered_data(), file)
         }
     )
-
-    # Set initial value for plot title text input
-    observe({
-        updateTextInput(
-            session = session,
-            inputId = "plot_title",
-            value = paste(input$select_y, "vs.", input$select_x)
-        )
-    })
 }
 
 shinyApp(ui = user_interface, server = server)
