@@ -22,6 +22,18 @@ format_variable_names <- function(names) {
         )
 }
 
+# Function to log user input
+log_input <- function(input_id, input_value) {
+    timestamp <- Sys.time()
+    log_message <- paste(
+        timestamp,
+        "- User input from", input_id, ":", input_value,
+        "\n"
+    )
+    # Append log message to a log file
+    cat(log_message, file = "user_input_log.txt", append = TRUE)
+}
+
 # Load data
 load("movies.RData")
 
@@ -96,6 +108,10 @@ user_interface <- fluidPage(
                 inputId = "plot_title",
                 label = "Plot Title",
             ),
+            actionButton(
+                inputId = "update_plot_title",
+                label = "Update Plot Title",
+            ),
             hr(),
 
             checkboxGroupInput(
@@ -117,12 +133,12 @@ user_interface <- fluidPage(
                 brush = "plot_brush",
                 hover = "plot_hover",
             ),
-            uiOutput(outputId = "number_obs"),
-            htmlOutput(outputId = "averages"),
+            uiOutput(outputId = "number_obs"), # used to output HTML content -> see 'renderUI'
+            htmlOutput(outputId = "averages"), # used to output HTML content -> see 'renderUI'
             verbatimTextOutput(outputId = "lmoutput"),
             br(),
 
-            dataTableOutput(outputId = "movie_table"),
+            DTOutput(outputId = "movie_table"),
             # Display the download button if the 'show_data' box is ticked
             conditionalPanel(
                 condition = "input.show_data == true",
@@ -134,7 +150,29 @@ user_interface <- fluidPage(
 )
 
 server <- function(input, output, session) {
-    
+
+    # Define the inputs to be logged
+    inputs_to_log <- c(
+        "select_y",
+        "select_x",
+        "colour",
+        "show_data",
+        "plot_title"
+    )
+
+    # Observe changes in selected inputs
+    observe({
+        lapply(inputs_to_log, function(input_id) {
+            observeEvent(
+                eventExpr = input[[input_id]],
+                handlerExpr = {
+                    input_value <- input[[input_id]]
+                    log_input(input_id=input_id, input_value=input_value)
+                }
+            )
+        })
+    })
+
     # Set initial value for plot title text input
     observe({
         updateTextInput(
@@ -143,7 +181,14 @@ server <- function(input, output, session) {
             value = paste(input$select_y, "vs.", input$select_x)
         )
     })
-    
+
+    # Use a reactive event to set the plot's title
+    new_plot_title <- eventReactive(
+        eventExpr = input$update_plot_title,
+        valueExpr = input$plot_title,
+        ignoreNULL = FALSE, # does not apply the change when the app first loads
+    )
+
     # Subset the movies by title type (documentary, movie or TV show)
     movie_subset <- reactive({
         req(input$movie_type) # Check availability of the input
@@ -152,7 +197,8 @@ server <- function(input, output, session) {
         # movies %>% select(input$movie_type)
     })
 
-    # Filter to table based on selected (brushed) points with the mouse (all points selected by default)
+    # Filter table based on selected (brushed) points with the mouse
+    # (all points selected by default)
     filtered_data <- reactive({
 
         # If the check box is selected, display the data
@@ -187,11 +233,13 @@ server <- function(input, output, session) {
 
     # Print number of movies plotted
     output$number_obs <- renderUI({
-        HTML(paste(
-            "The plot displays the relationship between the <br>",
-            input$select_x, "and", input$select_y, "of",
-            nrow(filtered_data()), "movies."
-        ))
+        HTML(
+            text = paste(
+                "The plot displays the relationship between the <br>",
+                input$select_x, "and", input$select_y, "of",
+                nrow(filtered_data()), "movies."
+            )
+        )
     })
 
     output$scatterplot <- renderPlot({
@@ -231,7 +279,17 @@ server <- function(input, output, session) {
             )
         ) + 
             geom_point(alpha = input$alpha, size = input$size) +
+            
+            # Add a title to the plot
             ggtitle(label = input$plot_title) +
+            
+            # # Add a title to the plot using a reactive expression
+            # ggtitle(label = new_plot_title()) +
+
+            # # Update plot title ONLY when one of the other input is modified
+            # ggtitle(label = isolate({input$plot_title})) +
+            
+            # Label/colourise the points based on a category
             labs(color = input$colour) +
 
             # # Add linear regression line with confidence interval
@@ -280,7 +338,7 @@ server <- function(input, output, session) {
 
         # Call the strings as HTML element
         HTML(
-            paste(
+            text = paste(
                 "<span style='color: red;'>",
                 str_x,
                 str_y,
