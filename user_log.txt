@@ -1,0 +1,37 @@
+2024-03-27 00:30:46.816785 - User input from select_y : Audience Score 
+2024-03-27 00:30:46.818524 - User input from select_x : Critics Score 
+2024-03-27 00:30:46.819809 - User input from colour : Mpaa Rating 
+2024-03-27 00:30:46.821057 - User input from alpha : 0.5 
+2024-03-27 00:30:46.82251 - User input from size : 2 
+2024-03-27 00:30:46.823763 - User input from show_data : TRUE 
+2024-03-27 00:30:46.824943 - User input from plot_title :  
+2024-03-27 00:30:46.826104 - User input from movie_type : Feature Film 
+2024-03-27 00:30:47.039815 - User input from plot_title : Audience Score vs. Critics Score 
+2024-03-27 00:30:55.957693 - User input from show_data : FALSE 
+2024-03-27 00:30:57.135305 - User input from show_data : TRUE 
+2024-03-27 00:34:22.714352 - User input from select_y : Audience Score 
+2024-03-27 00:34:22.716028 - User input from select_x : Critics Score 
+2024-03-27 00:34:22.717534 - User input from colour : Mpaa Rating 
+2024-03-27 00:34:22.718937 - User input from alpha : 0.5 
+2024-03-27 00:34:22.720293 - User input from size : 2 
+2024-03-27 00:34:22.721649 - User input from show_data : TRUE 
+2024-03-27 00:34:22.722963 - User input from plot_title :  
+2024-03-27 00:34:22.724289 - User input from movie_type : Feature Film 
+2024-03-27 00:34:22.963068 - User input from plot_title : Audience Score vs. Critics Score 
+2024-03-27 00:34:26.039222 - User input from show_data : FALSE 
+2024-03-27 00:34:27.874424 - User input from show_data : TRUE 
+2024-03-27 00:34:31.462393 - Action: Downloaded movie data 
+2024-03-27 00:41:50.44558 - User input from select_y : Audience Score 
+2024-03-27 00:41:50.447174 - User input from select_x : Critics Score 
+2024-03-27 00:41:50.448515 - User input from colour : Mpaa Rating 
+2024-03-27 00:41:50.450088 - User input from alpha : 0.5 
+2024-03-27 00:41:50.451752 - User input from size : 2 
+2024-03-27 00:41:50.45336 - User input from show_data : TRUE 
+2024-03-27 00:41:50.45485 - User input from plot_title :  
+2024-03-27 00:41:50.45616 - User input from movie_type : Documentary 
+ 2024-03-27 00:41:50.45616 - User input from movie_type : Feature Film 
+ 2024-03-27 00:41:50.45616 - User input from movie_type : TV Movie 
+2024-03-27 00:41:50.675354 - User input from plot_title : Audience Score vs. Critics Score 
+2024-03-27 00:41:53.709785 - User input from show_data : FALSE 
+2024-03-27 00:41:54.979609 - User input from show_data : TRUE 
+2024-03-27 00:41:58.756626 - Action: Downloaded movie data 

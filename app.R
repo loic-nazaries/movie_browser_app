@@ -31,7 +31,15 @@ log_input <- function(input_id, input_value) {
         "\n"
     )
     # Append log message to a log file
-    cat(log_message, file = "user_input_log.txt", append = TRUE)
+    cat(log_message, file = "user_log.txt", append = TRUE)
+}
+
+# Function to log user actions
+log_action <- function(action) {
+    timestamp <- Sys.time()
+    log_message <- paste(timestamp, "- Action:", action, "\n")
+    # Append log message to a log file
+    cat(log_message, file = "user_log.txt", append = TRUE)
 }
 
 # Load data
@@ -135,7 +143,7 @@ user_interface <- fluidPage(
             ),
             uiOutput(outputId = "number_obs"), # used to output HTML content -> see 'renderUI'
             htmlOutput(outputId = "averages"), # used to output HTML content -> see 'renderUI'
-            verbatimTextOutput(outputId = "lmoutput"),
+            verbatimTextOutput(outputId = "regression_output"),
             br(),
 
             DTOutput(outputId = "movie_table"),
@@ -156,8 +164,11 @@ server <- function(input, output, session) {
         "select_y",
         "select_x",
         "colour",
+        "alpha",
+        "size",
         "show_data",
-        "plot_title"
+        "plot_title",
+        "movie_type"
     )
 
     # Observe changes in selected inputs
@@ -349,7 +360,7 @@ server <- function(input, output, session) {
     })
 
     # # Print Linear Regression Summary
-    # output$lmoutput <- renderPrint({
+    # output$regression_output <- renderPrint({
     #     x <- movie_subset() %>% pull(input$select_x)
     #     y <- movie_subset() %>% pull(input$select_y)
     #     print(
@@ -359,7 +370,7 @@ server <- function(input, output, session) {
     #     )
     # })
 
-    # Display the table of data basedd on the filtered data (brushed or not)
+    # Display the table of data based on the filtered data (brushed or not)
     output$movie_table <- renderDT({
         datatable(
             data = filtered_data(),
@@ -373,6 +384,9 @@ server <- function(input, output, session) {
         filename = "movie_data.csv", # Default name; can be change on save
         content = function(file) {
             write_csv(filtered_data(), file)
+
+            # Log the download action
+            log_action(action="Downloaded movie data")
         }
     )
 }
