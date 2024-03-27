@@ -178,7 +178,7 @@ server <- function(input, output, session) {
                 eventExpr = input[[input_id]],
                 handlerExpr = {
                     input_value <- input[[input_id]]
-                    log_input(input_id=input_id, input_value=input_value)
+                    log_input(input_id = input_id, input_value = input_value)
                 }
             )
         })
@@ -205,7 +205,6 @@ server <- function(input, output, session) {
         req(input$movie_type) # Check availability of the input
         movies %>%
             filter(`Title Type` %in% input$movie_type)
-        # movies %>% select(input$movie_type)
     })
 
     # Filter table based on selected (brushed) points with the mouse
@@ -225,7 +224,7 @@ server <- function(input, output, session) {
                 )
                 return(brushed_data)
             }
-            
+
             else if (!is.null(input$plot_hover)) {
                 
                 hover_data <- nearPoints(
@@ -279,6 +278,17 @@ server <- function(input, output, session) {
             data = movie_subset(),
         )
 
+        # # Print Linear Regression Summary
+        # output$regression_output <- renderPrint({
+        #     x <- movie_subset() %>% pull(input$select_x)
+        #     y <- movie_subset() %>% pull(input$select_y)
+        #     print(
+        #         summary(lm(formula = y ~ x, data = movie_subset())),
+        #         digits = 3,
+        #         signif.stars = TRUE,
+        #     )
+        # })
+
         # Plot the scatter plot
         ggplot(
             data = movie_subset(),
@@ -290,16 +300,16 @@ server <- function(input, output, session) {
             )
         ) + 
             geom_point(alpha = input$alpha, size = input$size) +
-            
+
             # Add a title to the plot
             ggtitle(label = input$plot_title) +
-            
+
             # # Add a title to the plot using a reactive expression
             # ggtitle(label = new_plot_title()) +
 
             # # Update plot title ONLY when one of the other input is modified
             # ggtitle(label = isolate({input$plot_title})) +
-            
+
             # Label/colourise the points based on a category
             labs(color = input$colour) +
 
@@ -359,17 +369,6 @@ server <- function(input, output, session) {
         )
     })
 
-    # # Print Linear Regression Summary
-    # output$regression_output <- renderPrint({
-    #     x <- movie_subset() %>% pull(input$select_x)
-    #     y <- movie_subset() %>% pull(input$select_y)
-    #     print(
-    #         summary(lm(formula = y ~ x, data = movie_subset())),
-    #         digits = 3,
-    #         signif.stars = TRUE,
-    #     )
-    # })
-
     # Display the table of data based on the filtered data (brushed or not)
     output$movie_table <- renderDT({
         datatable(
@@ -386,7 +385,7 @@ server <- function(input, output, session) {
             write_csv(filtered_data(), file)
 
             # Log the download action
-            log_action(action="Downloaded movie data")
+            log_action(action = "Downloaded movie data")
         }
     )
 }

@@ -35,3 +35,28 @@
 2024-03-27 00:41:53.709785 - User input from show_data : FALSE 
 2024-03-27 00:41:54.979609 - User input from show_data : TRUE 
 2024-03-27 00:41:58.756626 - Action: Downloaded movie data 
+2024-03-27 00:47:04.761001 - User input from select_y : Audience Score 
+2024-03-27 00:47:04.765189 - User input from select_x : Critics Score 
+2024-03-27 00:47:04.767219 - User input from colour : Mpaa Rating 
+2024-03-27 00:47:04.768822 - User input from alpha : 0.5 
+2024-03-27 00:47:04.770344 - User input from size : 2 
+2024-03-27 00:47:04.771854 - User input from show_data : TRUE 
+2024-03-27 00:47:04.773305 - User input from plot_title :  
+2024-03-27 00:47:04.774752 - User input from movie_type : Feature Film 
+2024-03-27 00:47:05.055504 - User input from plot_title : Audience Score vs. Critics Score 
+2024-03-27 00:47:30.799099 - User input from movie_type : Feature Film 
+ 2024-03-27 00:47:30.799099 - User input from movie_type : TV Movie 
+2024-03-27 00:47:38.023037 - Action: Downloaded movie data 
+2024-03-27 01:10:20.2476 - User input from select_y : Audience Score 
+2024-03-27 01:10:20.252311 - User input from select_x : Critics Score 
+2024-03-27 01:10:20.254525 - User input from colour : Mpaa Rating 
+2024-03-27 01:10:20.25608 - User input from alpha : 0.5 
+2024-03-27 01:10:20.257565 - User input from size : 2 
+2024-03-27 01:10:20.259073 - User input from show_data : TRUE 
+2024-03-27 01:10:20.260813 - User input from plot_title :  
+2024-03-27 01:10:20.262401 - User input from movie_type : Feature Film 
+2024-03-27 01:10:20.536688 - User input from plot_title : Audience Score vs. Critics Score 
+2024-03-27 01:10:30.779506 - User input from movie_type : Documentary 
+ 2024-03-27 01:10:30.779506 - User input from movie_type : Feature Film 
+2024-03-27 01:10:38.501937 - User input from movie_type : Feature Film 
+2024-03-27 01:11:20.291365 - Action: Downloaded movie data 
