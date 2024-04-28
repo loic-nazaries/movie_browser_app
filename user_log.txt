@@ -60,3 +60,47 @@
  2024-03-27 01:10:30.779506 - User input from movie_type : Feature Film 
 2024-03-27 01:10:38.501937 - User input from movie_type : Feature Film 
 2024-03-27 01:11:20.291365 - Action: Downloaded movie data 
+2024-04-22 19:07:46.753885 - User input from select_y : Audience Score 
+2024-04-22 19:07:46.76928 - User input from select_x : Critics Score 
+2024-04-22 19:07:46.770567 - User input from colour : Mpaa Rating 
+2024-04-22 19:07:46.771912 - User input from alpha : 0.5 
+2024-04-22 19:07:46.773092 - User input from size : 2 
+2024-04-22 19:07:46.774246 - User input from show_data : TRUE 
+2024-04-22 19:07:46.775419 - User input from plot_title :  
+2024-04-22 19:07:46.776618 - User input from movie_type : Documentary 
+ 2024-04-22 19:07:46.776618 - User input from movie_type : Feature Film 
+ 2024-04-22 19:07:46.776618 - User input from movie_type : TV Movie 
+2024-04-22 19:07:47.247815 - User input from plot_title : Audience Score vs. Critics Score 
+2024-04-22 21:03:37.372622 - User input from select_y : Audience Score 
+2024-04-22 21:03:37.374674 - User input from select_x : Critics Score 
+2024-04-22 21:03:37.376239 - User input from colour : Mpaa Rating 
+2024-04-22 21:03:37.377763 - User input from alpha : 0.5 
+2024-04-22 21:03:37.379181 - User input from size : 2 
+2024-04-22 21:03:37.380374 - User input from show_data : TRUE 
+2024-04-22 21:03:37.381535 - User input from plot_title :  
+2024-04-22 21:03:37.382732 - User input from movie_type : Documentary 
+ 2024-04-22 21:03:37.382732 - User input from movie_type : Feature Film 
+ 2024-04-22 21:03:37.382732 - User input from movie_type : TV Movie 
+2024-04-22 21:03:37.69911 - User input from plot_title : Audience Score vs. Critics Score 
+2024-04-22 21:08:00.102918 - User input from select_x : Imdb Rating 
+2024-04-22 21:08:00.363248 - User input from plot_title : Audience Score vs. Imdb Rating 
+2024-04-22 21:08:15.172194 - User input from select_x : Critics Score 
+2024-04-22 21:08:15.422454 - User input from plot_title : Audience Score vs. Critics Score 
+2024-04-22 21:08:34.991437 - User input from select_x : Imdb Num Votes 
+2024-04-22 21:08:35.242768 - User input from plot_title : Audience Score vs. Imdb Num Votes 
+2024-04-22 21:14:41.536044 - User input from movie_type : Feature Film 
+ 2024-04-22 21:14:41.536044 - User input from movie_type : TV Movie 
+2024-04-22 21:14:42.494604 - User input from movie_type : TV Movie 
+2024-04-22 21:15:07.593602 - User input from movie_type : TV Movie 
+2024-04-22 21:15:08.748348 - User input from movie_type : Feature Film 
+ 2024-04-22 21:15:08.748348 - User input from movie_type : TV Movie 
+2024-04-22 21:15:09.385416 - User input from movie_type : Documentary 
+ 2024-04-22 21:15:09.385416 - User input from movie_type : Feature Film 
+ 2024-04-22 21:15:09.385416 - User input from movie_type : TV Movie 
+2024-04-22 21:16:18.002872 - User input from plot_title : Audience Score vs. Imdb Num 
+2024-04-22 21:16:54.030692 - User input from colour : Studio 
+2024-04-22 21:16:59.351335 - User input from colour : Genre 
+2024-04-22 21:18:01.248427 - User input from show_data : FALSE 
+2024-04-22 21:18:07.544275 - User input from show_data : TRUE 
+2024-04-22 21:18:13.592933 - User input from show_data : FALSE 
+2024-04-22 21:18:18.171205 - User input from show_data : TRUE 

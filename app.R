@@ -55,10 +55,10 @@ numeric_columns <- which(sapply(movies, is.numeric))
 # Subset the data table to include only numeric columns
 numeric_data <- movies[, numeric_columns]
 
-# Get the numeric column indices
+# Get the categorical column indices
 factor_columns <- which(sapply(movies, is.factor))
 
-# Subset the data table to include only numeric columns
+# Subset the data table to include only categorical columns
 factor_data <- movies[, factor_columns]
 
 
