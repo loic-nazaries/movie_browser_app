@@ -8,7 +8,7 @@ library(readr)
 library(DT)
 
 # Function to format variable names
-format_variable_names <- function(names) {
+formatVariableName <- function(names) {
     names %>%
         str_replace_all("_", " ") %>%   # Replace "_" with space
         str_to_lower() %>%              # Convert to lowercase
@@ -23,7 +23,7 @@ format_variable_names <- function(names) {
 }
 
 # Function to log user input
-log_input <- function(input_id, input_value) {
+logInput <- function(input_id, input_value) {
     timestamp <- Sys.time()
     log_message <- paste(
         timestamp,
@@ -35,7 +35,7 @@ log_input <- function(input_id, input_value) {
 }
 
 # Function to log user actions
-log_action <- function(action) {
+logAction <- function(action) {
     timestamp <- Sys.time()
     log_message <- paste(timestamp, "- Action:", action, "\n")
     # Append log message to a log file
@@ -46,7 +46,7 @@ log_action <- function(action) {
 load("movies.RData")
 
 # Apply formatting to column names
-formatted_names <- format_variable_names(colnames(movies))
+formatted_names <- formatVariableName(colnames(movies))
 colnames(movies) <- formatted_names
 
 # Get the numeric column indices
@@ -178,7 +178,7 @@ server <- function(input, output, session) {
                 eventExpr = input[[input_id]],
                 handlerExpr = {
                     input_value <- input[[input_id]]
-                    log_input(input_id = input_id, input_value = input_value)
+                    logInput(input_id = input_id, input_value = input_value)
                 }
             )
         })
@@ -385,7 +385,7 @@ server <- function(input, output, session) {
             write_csv(filtered_data(), file)
 
             # Log the download action
-            log_action(action = "Downloaded movie data")
+            logAction(action = "Downloaded movie data")
         }
     )
 }

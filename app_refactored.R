@@ -14,7 +14,7 @@ source("helpers.R")
 load("movies.RData")
 
 # Apply formatting to column names
-formatted_names <- format_variable_names(colnames(movies))
+formatted_names <- formatVariableName(colnames(movies))
 colnames(movies) <- formatted_names
 
 # Get the numeric column indices
@@ -145,7 +145,7 @@ server <- function(input, output, session) {
                 eventExpr = input[[input_id]],
                 handlerExpr = {
                     input_value <- input[[input_id]]
-                    log_input(input_id = input_id, input_value = input_value)
+                    logInput(input_id = input_id, input_value = input_value)
                 }
             )
         })
@@ -297,7 +297,7 @@ server <- function(input, output, session) {
             write_csv(filtered_data(), file)
 
             # Log the download action
-            log_action(action = "Downloaded movie data")
+            logAction(action = "Downloaded movie data")
         }
     )
 }
