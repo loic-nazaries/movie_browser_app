@@ -114,14 +114,15 @@ user_interface <- fluidPage(
         brush = "plot_brush",
         hover = "plot_hover",
       ),
+      br(),
 
       # used to output HTML content -> see 'renderUI'
       uiOutput(outputId = "number_obs"),
       htmlOutput(outputId = "averages"),
 
       verbatimTextOutput(outputId = "regression_output"),
-      br(),
 
+      br(),
       DTOutput(outputId = "movie_table"),
 
     ),
@@ -141,7 +142,7 @@ server <- function(input, output, session) {
   output$number_obs <- renderUI({
     HTML(
       text = paste(
-        "The plot displays the relationship between the <br>",
+        "The plot displays the relationship between the",
         input$select_x, "and", input$select_y, "of",
         nrow(movie_subset()), "movies."
       )
@@ -198,10 +199,7 @@ server <- function(input, output, session) {
       geom_point(alpha = input$alpha, size = input$size) +
 
       # Add a title to the plot
-      ggtitle(label = input$plot_title) +
-
-      # Label/colourise the points based on a category
-      labs(color = input$colour) +
+      labs(title = paste(input$select_x, "vs.", input$select_y)) +
 
       # # Add linear regression line with confidence interval
       # geom_smooth(method = "lm", formula = y ~ x, se = TRUE) +

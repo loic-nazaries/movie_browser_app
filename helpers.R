@@ -127,7 +127,6 @@ draw_scatterplot <- function(
   colour,
   alpha_value,
   size_value,
-  title,
   correlation_coefficient,
   regression_model
 ) {
@@ -137,12 +136,11 @@ draw_scatterplot <- function(
       # Enclose input names in backticks when they contain a space
       x = paste0("`", variable_x, "`"),
       y = paste0("`", variable_y, "`"),
-      color = paste0("`", colour, "`")
+      color = paste0("`", colour, "`")  # Label the points based on a category
     )
   ) +
     geom_point(alpha = alpha_value, size = size_value) +
-    ggtitle(label = title) +
-    labs(color = colour) +
+    labs(title = paste(variable_x, "vs.", variable_y)) +
 
     # # Add linear regression line with confidence interval
     # geom_smooth(method = "lm", formula = y ~ x, se = TRUE) +

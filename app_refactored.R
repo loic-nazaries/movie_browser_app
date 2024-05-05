@@ -29,6 +29,16 @@ factor_columns <- which(sapply(movies, is.factor))
 # Subset the data table to include only numeric columns
 factor_data <- movies[, factor_columns]
 
+# Define the inputs to be logged
+inputs_to_log <- c(
+  "select_y",
+  "select_x",
+  "colour",
+  "alpha",
+  "size",
+  "show_data",
+  "movie_type"
+)
 
 # Define UI
 user_interface <- fluidPage(
@@ -80,10 +90,6 @@ user_interface <- fluidPage(
         label = "Show Data Table",
         value = TRUE,
       ),
-      textInput(
-        inputId = "plot_title",
-        label = "Plot Title",
-      ),
       hr(),
 
       checkboxGroupInput(
@@ -105,10 +111,15 @@ user_interface <- fluidPage(
         brush = "plot_brush",
         hover = "plot_hover",
       ),
-      htmlOutput(outputId = "averages"),
-      verbatimTextOutput(outputId = "regression_output"),
       br(),
 
+      # used to output HTML content -> see 'renderUI'
+      uiOutput(outputId = "number_obs"),
+      htmlOutput(outputId = "averages"),
+
+      verbatimTextOutput(outputId = "regression_output"),
+
+      br(),
       DTOutput(outputId = "movie_table"),
       # Display the download button if the 'show_data' box is ticked
       conditionalPanel(
@@ -121,18 +132,6 @@ user_interface <- fluidPage(
 )
 
 server <- function(input, output, session) {
-
-  # Define the inputs to be logged
-  inputs_to_log <- c(
-    "select_y",
-    "select_x",
-    "colour",
-    "alpha",
-    "size",
-    "show_data",
-    "plot_title",
-    "movie_type"
-  )
 
   # Observe changes in selected inputs
   observe({
@@ -164,7 +163,7 @@ server <- function(input, output, session) {
   output$number_obs <- renderUI({
     HTML(
       text = paste(
-        "The plot displays the relationship between the <br>",
+        "The plot displays the relationship between the",
         input$select_x, "and", input$select_y, "of",
         nrow(filtered_data()), "movies."
       )
@@ -200,7 +199,6 @@ server <- function(input, output, session) {
       colour = input$colour,
       alpha_value = input$alpha,
       size_value = input$size,
-      title = input$plot_title,
       correlation_coefficient = correlation_coefficient,
       regression_model = regression_model
     )

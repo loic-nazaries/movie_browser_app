@@ -61,6 +61,16 @@ factor_columns <- which(sapply(movies, is.factor))
 # Subset the data table to include only categorical columns
 factor_data <- movies[, factor_columns]
 
+# Define the inputs to be logged
+inputs_to_log <- c(
+  "select_y",
+  "select_x",
+  "colour",
+  "alpha",
+  "size",
+  "show_data",
+  "movie_type"
+)
 
 # Define UI
 user_interface <- fluidPage(
@@ -112,10 +122,6 @@ user_interface <- fluidPage(
         label = "Show Data Table",
         value = TRUE,
       ),
-      textInput(
-        inputId = "plot_title",
-        label = "Plot Title",
-      ),
       hr(),
 
       checkboxGroupInput(
@@ -137,14 +143,15 @@ user_interface <- fluidPage(
         brush = "plot_brush",
         hover = "plot_hover",
       ),
+      br(),
 
       # used to output HTML content -> see 'renderUI'
       uiOutput(outputId = "number_obs"),
       htmlOutput(outputId = "averages"),
 
       verbatimTextOutput(outputId = "regression_output"),
-      br(),
 
+      br(),
       DTOutput(outputId = "movie_table"),
       # Display the download button if the 'show_data' box is ticked
       conditionalPanel(
@@ -157,18 +164,6 @@ user_interface <- fluidPage(
 )
 
 server <- function(input, output, session) {
-
-  # Define the inputs to be logged
-  inputs_to_log <- c(
-    "select_y",
-    "select_x",
-    "colour",
-    "alpha",
-    "size",
-    "show_data",
-    "plot_title",
-    "movie_type"
-  )
 
   # Observe changes in selected inputs
   observe({
@@ -222,7 +217,7 @@ server <- function(input, output, session) {
   output$number_obs <- renderUI({
     HTML(
       text = paste(
-        "The plot displays the relationship between the <br>",
+        "The plot displays the relationship between the",
         input$select_x, "and", input$select_y, "of",
         nrow(filtered_data()), "movies."
       )
@@ -273,16 +268,13 @@ server <- function(input, output, session) {
         # Enclose input names in backticks when they contain a space
         x = paste0("`", input$select_x, "`"),
         y = paste0("`", input$select_y, "`"),
-        color = paste0("`", input$colour, "`")
+        color = paste0("`", input$colour, "`")  # Label the points based on a category
       )
     ) +
       geom_point(alpha = input$alpha, size = input$size) +
 
       # Add a title to the plot
-      ggtitle(label = input$plot_title) +
-
-      # Label/colourise the points based on a category
-      labs(color = input$colour) +
+      labs(title = paste(input$select_x, "vs.", input$select_y)) +
 
       # # Add linear regression line with confidence interval
       # geom_smooth(method = "lm", formula = y ~ x, se = TRUE) +
