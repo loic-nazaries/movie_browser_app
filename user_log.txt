@@ -174,3 +174,44 @@
 2024-05-04 21:32:03.05751 - User input from show_data : FALSE 
 2024-05-04 21:32:06.227669 - User input from show_data : TRUE 
 2024-05-04 21:40:04.573334 - Action: Downloaded movie data 
+2024-05-05 02:12:28.517182 - User input from select_y : Audience Score 
+2024-05-05 02:12:28.519554 - User input from select_x : Critics Score 
+2024-05-05 02:12:28.52086 - User input from colour : Mpaa Rating 
+2024-05-05 02:12:28.522061 - User input from alpha : 0.5 
+2024-05-05 02:12:28.523251 - User input from size : 2 
+2024-05-05 02:12:28.524447 - User input from show_data : TRUE 
+2024-05-05 02:12:28.525614 - User input from plot_title :  
+2024-05-05 02:12:28.526781 - User input from movie_type : Documentary 
+ 2024-05-05 02:12:28.526781 - User input from movie_type : Feature Film 
+ 2024-05-05 02:12:28.526781 - User input from movie_type : TV Movie 
+2024-05-05 02:12:29.075868 - User input from plot_title : Audience Score vs. Critics Score 
+2024-05-05 02:12:34.346977 - User input from show_data : FALSE 
+2024-05-05 02:12:35.698301 - User input from show_data : TRUE 
+2024-05-05 15:19:38.073453 - User input from select_y : Audience Score 
+2024-05-05 15:19:38.245951 - User input from select_x : Critics Score 
+2024-05-05 15:19:38.247421 - User input from colour : Mpaa Rating 
+2024-05-05 15:19:38.248665 - User input from alpha : 0.5 
+2024-05-05 15:19:38.249983 - User input from size : 2 
+2024-05-05 15:19:38.251265 - User input from show_data : TRUE 
+2024-05-05 15:19:38.252564 - User input from plot_title :  
+2024-05-05 15:19:38.254112 - User input from movie_type : Feature Film 
+2024-05-05 15:20:01.860659 - User input from show_data : FALSE 
+2024-05-05 15:20:07.517647 - User input from movie_type : Documentary 
+ 2024-05-05 15:20:07.517647 - User input from movie_type : Feature Film 
+2024-05-05 15:20:10.975827 - User input from movie_type : Documentary 
+ 2024-05-05 15:20:10.975827 - User input from movie_type : Feature Film 
+ 2024-05-05 15:20:10.975827 - User input from movie_type : TV Movie 
+2024-05-05 15:20:23.103746 - User input from select_x : Imdb Num Votes 
+2024-05-05 15:20:29.861316 - User input from select_x : Imdb Rating 
+2024-05-05 15:20:35.069546 - User input from show_data : TRUE 
+2024-05-05 15:21:30.77825 - Action: Downloaded movie data 
+2024-05-05 15:21:45.934508 - User input from size : 3 
+2024-05-05 15:21:50.459971 - User input from alpha : 0.21 
+2024-05-05 15:27:03.102901 - User input from select_y : Audience Score 
+2024-05-05 15:27:03.104375 - User input from select_x : Critics Score 
+2024-05-05 15:27:03.10562 - User input from colour : Mpaa Rating 
+2024-05-05 15:27:03.106843 - User input from alpha : 0.5 
+2024-05-05 15:27:03.108078 - User input from size : 2 
+2024-05-05 15:27:03.109444 - User input from show_data : TRUE 
+2024-05-05 15:27:03.110668 - User input from plot_title :  
+2024-05-05 15:27:03.11198 - User input from movie_type : Feature Film 
