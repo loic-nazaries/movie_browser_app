@@ -6,6 +6,7 @@ library(stringr)
 library(purrr)
 library(readr)
 library(DT)
+library(bslib)
 
 # Function to format variable names
 format_variable_name <- function(names) {
@@ -74,6 +75,7 @@ inputs_to_log <- c(
 
 # Define UI
 user_interface <- fluidPage(
+  theme = bs_theme(preset = "solar"),
 
   # App title
   titlePanel("Movie Browser"),
