@@ -644,3 +644,14 @@
 2024-05-09 23:56:26.797344 - User input from movie_type : Documentary 
  2024-05-09 23:56:26.797344 - User input from movie_type : Feature Film 
  2024-05-09 23:56:26.797344 - User input from movie_type : TV Movie 
+2024-05-10 00:06:40.08978 - User input from select_y : Audience Score 
+2024-05-10 00:06:40.091197 - User input from select_x : Critics Score 
+2024-05-10 00:06:40.092388 - User input from colour : Mpaa Rating 
+2024-05-10 00:06:40.093565 - User input from alpha : 0.5 
+2024-05-10 00:06:40.094802 - User input from size : 2 
+2024-05-10 00:06:40.096621 - User input from show_data : TRUE 
+2024-05-10 00:06:40.098455 - User input from movie_type : Documentary 
+ 2024-05-10 00:06:40.098455 - User input from movie_type : Feature Film 
+ 2024-05-10 00:06:40.098455 - User input from movie_type : TV Movie 
+2024-05-10 00:06:51.091032 - User input from show_data : FALSE 
+2024-05-10 00:06:56.301531 - User input from show_data : TRUE 
