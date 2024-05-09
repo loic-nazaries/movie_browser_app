@@ -7,6 +7,12 @@ library(purrr)
 library(readr)
 library(DT)
 library(bslib)
+library(thematic)
+
+# Call thematic_shiny() prior to launching the app, to change
+# R plot theming defaults for all the plots generated in the app
+thematic_shiny(font = "auto")
+
 
 # Function to format variable names
 format_variable_name <- function(names) {
@@ -75,7 +81,10 @@ inputs_to_log <- c(
 
 # Define UI
 user_interface <- fluidPage(
-  theme = bs_theme(preset = "solar"),
+  theme = bs_theme(
+    preset = "solar",
+    base_font = font_google("Pacifico"),
+  ),
 
   # App title
   titlePanel("Movie Browser"),
@@ -287,7 +296,7 @@ server <- function(input, output, session) {
         label = paste("Correlation = ", correlation),
         hjust = 1,
         vjust = -0.5,
-        color = "red",
+        color = "orange",
         size = 5,
       ) +
 
@@ -302,7 +311,7 @@ server <- function(input, output, session) {
         ),
         hjust = 1,
         vjust = 1,
-        color = "blue",
+        color = "white",
         size = 5,
       )
   })
