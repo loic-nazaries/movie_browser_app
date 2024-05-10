@@ -120,8 +120,6 @@ user_interface <- fluidPage(
       uiOutput(outputId = "number_obs"),
       htmlOutput(outputId = "averages"),
 
-      verbatimTextOutput(outputId = "regression_output"),
-
       br(),
       DTOutput(outputId = "movie_table"),
 
@@ -175,17 +173,6 @@ server <- function(input, output, session) {
       data = movie_subset(),
     )
 
-    # # Print Linear Regression Summary
-    # output$regression_output <- renderPrint({
-    #   x <- movie_subset() %>% pull(input$select_x)
-    #   y <- movie_subset() %>% pull(input$select_y)
-    #   print(
-    #     summary(lm(formula = y ~ x, data = movie_subset())),
-    #     digits = 3,
-    #     signif.stars = TRUE,
-    #   )
-    # })
-
     # Plot the scatter plot
     ggplot(
       data = movie_subset(),
@@ -207,7 +194,7 @@ server <- function(input, output, session) {
       # Add text annotation for correlation coefficient
       geom_text(
         x = Inf, y = -Inf,
-        label = paste("Correlation = ", correlation),
+        label = paste("Correlation =", correlation),
         hjust = 1,
         vjust = -0.5,
         color = "red",
@@ -218,7 +205,8 @@ server <- function(input, output, session) {
       geom_text(
         x = Inf, y = Inf,
         label = paste(
-          "Regression: ",
+          input$select_y,
+          "=",
           sprintf("%.2f", coef(lm_model)[1]), " + ",
           sprintf("%.2f", coef(lm_model)[2]), " * ",
           input$select_x
